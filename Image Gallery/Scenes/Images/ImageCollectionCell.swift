@@ -11,11 +11,7 @@ import UIKit
 class ImageCollectionCell: UICollectionViewCell
 {
     
-    @IBOutlet weak var galleryImageView: UIImageView! {
-        didSet {
-            print("DidSet")
-        }
-    }
+    @IBOutlet weak var galleryImageView: UIImageView!
     
-    
+    public var imageURL: URL!
 }

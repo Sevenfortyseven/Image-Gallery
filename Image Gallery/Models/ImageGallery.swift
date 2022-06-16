@@ -11,7 +11,7 @@ import UIKit
 struct ImageGallery
 {
     let title: String
-    let images: [UIImage]?
+    let images: [GalleryImage]?
     let imageURLs: [URL]?
     
 }
@@ -20,7 +20,7 @@ struct ImageGallery
 struct RemovedGallery
 {
     let title: String
-    let images: [UIImage]?
+    let images: [GalleryImage]?
     let imageURLs: [URL]?
     
 }

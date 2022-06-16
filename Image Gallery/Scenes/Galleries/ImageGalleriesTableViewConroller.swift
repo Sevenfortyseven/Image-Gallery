@@ -17,7 +17,7 @@ public class ImageGalleriesTableViewConroller: UITableViewController
     weak var delegate: ImageGalleriesTableViewControllerDelegate?
     
 
-    private var dataSource = GalleryStore.sharedGalleryStore
+    private var dataSource = DataStore.sharedDataStore
     
     public override func viewDidLoad() {
         super.viewDidLoad()
