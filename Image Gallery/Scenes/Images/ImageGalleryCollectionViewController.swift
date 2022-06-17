@@ -13,32 +13,67 @@ public class ImageGalleryCollectionViewController: UICollectionViewController
     
     private var dataSource = DataStore.sharedDataStore.galleryData
     
+    private var cellWidthScale: CGFloat = 150
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupDelegate()
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
+        addGestureRecognizers()
     }
+    
     
     private func setupDelegate() {
         let navVC = splitViewController?.viewControllers[0] as! UINavigationController
-        let galleriesVC = navVC.viewControllers[0] as! ImageGalleriesTableViewConroller
+        let galleriesVC = navVC.viewControllers[0] as! ImageGalleriesViewController
         galleriesVC.delegate = self
+    }
+    
+    private func addGestureRecognizers() {
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(resizeCell))
+        collectionView.addGestureRecognizer(pinchGesture)
+    }
+    
+    
+    @objc
+    private func resizeCell(sender: UIPinchGestureRecognizer) {
+        print(sender.scale)
+        let minimumScale: CGFloat =  0.5
+        let maxmimumScale: CGFloat = 2
+        if sender.state == UIGestureRecognizer.State.changed ||
+            sender.state == UIGestureRecognizer.State.ended {
+            if sender.scale > minimumScale && sender.scale < maxmimumScale {
+                cellWidthScale *= sender.scale
+                flowLayout.invalidateLayout()
+            }
+            sender.scale = 1
+        }
+        
+  
     }
     
 }
 
 
-extension ImageGalleryCollectionViewController
+extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayout
 {
     
+    var flowLayout: UICollectionViewFlowLayout {
+        return collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+    }
+    
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: cellWidthScale, height: (cellWidthScale * (dataSource[indexPath.row].aspectRatio ?? 150)))
+    }
+   
     public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionCell", for: indexPath)
         if let imageCell = cell as? ImageCollectionCell {
             if let imageUrl = dataSource[indexPath.item].url {
                 imageCell.imageURL = imageUrl
-                imageCell.galleryImageView.fetchImage(with: imageUrl)
+                imageCell.fetchImage(with: imageUrl)
                 
             }
         }
@@ -50,6 +85,7 @@ extension ImageGalleryCollectionViewController
     public override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.count
     }
+    
     
 }
 
@@ -109,11 +145,13 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate, UI
                 var newGalleryItem = GalleryImage()
                 let placeholderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell"))
                 
-                // Get an object image
+                // Get an object image aspect ratio
                 item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { imageProvider, _ in
                     DispatchQueue.main.async {
                         if let image = imageProvider as? UIImage {
-                            newGalleryItem.image = image
+                            let aspectRatio = image.size.height / image.size.width
+                            newGalleryItem.aspectRatio = aspectRatio
+                            
                         } else {
                             placeholderContext.deletePlaceholder()
                         }

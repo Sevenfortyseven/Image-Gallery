@@ -11,11 +11,11 @@ import UIKit
 struct GalleryImage
 {
         
-    var image: UIImage?
+    var aspectRatio: CGFloat?
     var url: URL?
     
-    init(image: UIImage? = nil, url: URL? = nil) {
-        self.image = image
+    init(aspectRatio: CGFloat? = nil, url: URL? = nil) {
+        self.aspectRatio = aspectRatio
         self.url = url
     }
     

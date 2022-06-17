@@ -11,8 +11,7 @@ import UIKit
 struct ImageGallery
 {
     let title: String
-    let images: [GalleryImage]?
-    let imageURLs: [URL]?
+    let galleryImages: [GalleryImage]?
     
 }
 

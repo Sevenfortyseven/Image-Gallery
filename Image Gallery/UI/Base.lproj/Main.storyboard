@@ -3,6 +3,9 @@
     <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,15 +13,73 @@
         <!--Split View Controller-->
         <scene sceneID="zP6-3F-nNY">
             <objects>
-                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="secondaryOnly" id="0Kd-ev-OkH" sceneMemberID="viewController">
+                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="secondaryOnly" behavior="overlay" id="0Kd-ev-OkH" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="P8A-Wj-5gP" kind="relationship" relationship="masterViewController" id="L55-ac-m6t"/>
                         <segue destination="4ub-tg-sk7" kind="relationship" relationship="detailViewController" id="b37-QA-gH8"/>
+                        <segue destination="hId-hi-qIb" kind="relationship" relationship="masterViewController" id="1iW-1w-2Go"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbl-LJ-Iia" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1220" y="76"/>
+        </scene>
+        <!--Image Galleries View Controller-->
+        <scene sceneID="AQe-6C-zRT">
+            <objects>
+                <viewController storyboardIdentifier="ImageGalleriesViewController" id="hId-hi-qIb" customClass="ImageGalleriesViewController" customModule="Image_Gallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KT7-Ak-A9Q">
+                        <rect key="frame" x="0.0" y="0.0" width="420" height="1366"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8Bg-8o-FBB">
+                                <rect key="frame" x="0.0" y="120" width="420" height="1246"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GalleryCell" id="kQT-Gl-XPg">
+                                        <rect key="frame" x="0.0" y="44.5" width="420" height="51.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kQT-Gl-XPg" id="LyE-J0-Qyn">
+                                            <rect key="frame" x="100" y="0.0" width="320" height="51.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0V-BN-mbK">
+                                <rect key="frame" x="316" y="70" width="89" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="y6K-HF-MEP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                                </state>
+                                <buttonConfiguration key="configuration" style="filled" title="Gallery">
+                                    <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="addNewGallery:" destination="hId-hi-qIb" eventType="touchUpInside" id="VdM-Dm-WdY"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="xjx-tZ-Vkn"/>
+                        <color key="backgroundColor" systemColor="systemBrownColor"/>
+                        <constraints>
+                            <constraint firstItem="xjx-tZ-Vkn" firstAttribute="trailing" secondItem="8Bg-8o-FBB" secondAttribute="trailing" id="5Qy-DM-Lnx"/>
+                            <constraint firstItem="xjx-tZ-Vkn" firstAttribute="bottom" secondItem="8Bg-8o-FBB" secondAttribute="bottom" id="93c-4T-rn0"/>
+                            <constraint firstItem="xjx-tZ-Vkn" firstAttribute="trailing" secondItem="U0V-BN-mbK" secondAttribute="trailing" constant="15" id="G4y-hC-Bbl"/>
+                            <constraint firstItem="8Bg-8o-FBB" firstAttribute="leading" secondItem="xjx-tZ-Vkn" secondAttribute="leading" id="HK2-zb-3Lj"/>
+                            <constraint firstItem="8Bg-8o-FBB" firstAttribute="top" secondItem="U0V-BN-mbK" secondAttribute="bottom" constant="15" id="NN0-aB-UzH"/>
+                            <constraint firstItem="U0V-BN-mbK" firstAttribute="top" secondItem="xjx-tZ-Vkn" secondAttribute="top" id="gyR-A4-RO3"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="galleriesTableView" destination="8Bg-8o-FBB" id="x20-Gl-xTT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fTa-7P-ov5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-297.0703125" y="528.84333821376276"/>
         </scene>
         <!--Image Gallery-->
         <scene sceneID="ftY-4h-8OI">
@@ -42,19 +103,25 @@
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kG7-kB-eak">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kG7-kB-eak">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         </imageView>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UJf-3J-5r5">
+                                            <rect key="frame" x="54" y="54" width="20" height="20"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="UJf-3J-5r5" firstAttribute="centerY" secondItem="fqv-Xt-TKW" secondAttribute="centerY" id="BiX-te-AsH"/>
                                         <constraint firstItem="kG7-kB-eak" firstAttribute="top" secondItem="fqv-Xt-TKW" secondAttribute="top" id="DnI-V9-b6y"/>
                                         <constraint firstItem="kG7-kB-eak" firstAttribute="leading" secondItem="fqv-Xt-TKW" secondAttribute="leading" id="KQP-dz-xR6"/>
                                         <constraint firstAttribute="bottom" secondItem="kG7-kB-eak" secondAttribute="bottom" id="V0X-14-bQw"/>
                                         <constraint firstAttribute="trailing" secondItem="kG7-kB-eak" secondAttribute="trailing" id="Xfq-sg-U5x"/>
+                                        <constraint firstItem="UJf-3J-5r5" firstAttribute="centerX" secondItem="fqv-Xt-TKW" secondAttribute="centerX" id="zAZ-QC-ksn"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <connections>
                                     <outlet property="galleryImageView" destination="kG7-kB-eak" id="e02-8K-XBs"/>
+                                    <outlet property="loadingSpinner" destination="UJf-3J-5r5" id="X2l-1W-RXC"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="DropPlaceholderCell" id="HCW-HZ-Uoj">
@@ -86,34 +153,6 @@
             </objects>
             <point key="canvasLocation" x="875.9765625" y="-480.08784773060023"/>
         </scene>
-        <!--Image Galleries Table View Conroller-->
-        <scene sceneID="tK0-Nd-GjX">
-            <objects>
-                <tableViewController storyboardIdentifier="ImageGalleriesTableViewConroller" id="P8A-Wj-5gP" customClass="ImageGalleriesTableViewConroller" customModule="Image_Gallery" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="VIb-hN-sNT">
-                        <rect key="frame" x="0.0" y="0.0" width="420" height="1366"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.52834331990000005" green="0.54572570320000002" blue="0.54996567959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GalleryCell" id="yTN-dO-6LE">
-                                <rect key="frame" x="0.0" y="44.5" width="420" height="51.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yTN-dO-6LE" id="1s7-sX-5Cw">
-                                    <rect key="frame" x="100" y="0.0" width="320" height="51.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="P8A-Wj-5gP" id="L4o-Ga-GxK"/>
-                            <outlet property="delegate" destination="P8A-Wj-5gP" id="fq3-yX-ERz"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3Mb-EC-XFQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-441" y="534"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="hLD-fk-XER">
             <objects>
@@ -133,4 +172,13 @@
             <point key="canvasLocation" x="151.7578125" y="-480.08784773060023"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBrownColor">
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
