@@ -8,13 +8,14 @@
 import UIKit
 
 
-protocol ImageGalleriesTableViewControllerDelegate: AnyObject {
+protocol ImageGalleriesViewControllerDelegate: AnyObject {
+    func didChangeGalleryState(isSelected: Bool)
     func reloadData()
 }
 
 public class ImageGalleriesViewController: UIViewController
 {
-    weak var delegate: ImageGalleriesTableViewControllerDelegate?
+    weak var delegate: ImageGalleriesViewControllerDelegate?
     
     @IBOutlet private var galleriesTableView: UITableView! {
         didSet {
@@ -38,7 +39,6 @@ public class ImageGalleriesViewController: UIViewController
         alert.addAction(UIAlertAction(title: "Create", style: .default, handler: { _ in
             if let inputText = alert.textFields?.first?.text {
                 print("created")
-//                DataStore.sharedDataStore.createGallery(with: inputText)
                 self.dataSource.createGallery(with: inputText)
                 self.galleriesTableView.reloadData()
             }
@@ -62,17 +62,26 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
         case 0:
             return dataSource.galleryStore.count
         case 1:
-            return 0
+            return dataSource.removedGalleryStore.count
         default: return 0
         }
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath)
-        var config = cell.defaultContentConfiguration()
-        config.text = dataSource.galleryStore[indexPath.item].title
-        cell.contentConfiguration = config
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath)
+            var config = cell.defaultContentConfiguration()
+            config.text = dataSource.galleryStore[indexPath.row].title
+            cell.contentConfiguration = config
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RemovedGalleryCell", for: indexPath)
+            var config = cell.defaultContentConfiguration()
+            config.text = dataSource.removedGalleryStore[indexPath.item].title
+            cell.contentConfiguration = config
+            return cell
+        }
+  
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -84,9 +93,29 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        let newGallery = ImageGallery(title: "AA", images: nil, imageURLs: nil)
-        //        dataSource.galleryStore.append(newGallery)
-        //        delegate?.reloadData()
+        dataSource.chooseGallery(with: indexPath)
+        delegate?.reloadData()
+        delegate?.didChangeGalleryState(isSelected: true)
         
+    }
+    
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // indexPath for second section
+        let indexPathForSectionTwo: IndexPath = [1, indexPath.row]
+        
+        switch editingStyle {
+        case .delete:
+            tableView.performBatchUpdates {
+                let removedGallery = dataSource.galleryStore.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                print("indexPath row \(indexPath.row)")
+                dataSource.removedGalleryStore.append(removedGallery)
+                tableView.insertRows(at: [indexPathForSectionTwo], with: .right)
+            }
+            
+            
+            
+        default: break
+        }
     }
 }

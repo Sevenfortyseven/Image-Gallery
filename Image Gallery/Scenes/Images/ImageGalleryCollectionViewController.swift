@@ -11,7 +11,7 @@ import UIKit
 public class ImageGalleryCollectionViewController: UICollectionViewController
 {
     
-    private var dataSource = DataStore.sharedDataStore.galleryData
+    private var dataSource = DataStore.sharedDataStore
     
     private var cellWidthScale: CGFloat = 150
     
@@ -24,11 +24,13 @@ public class ImageGalleryCollectionViewController: UICollectionViewController
     }
     
     
+    
     private func setupDelegate() {
         let navVC = splitViewController?.viewControllers[0] as! UINavigationController
         let galleriesVC = navVC.viewControllers[0] as! ImageGalleriesViewController
         galleriesVC.delegate = self
     }
+
     
     private func addGestureRecognizers() {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(resizeCell))
@@ -65,13 +67,13 @@ extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayo
     
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidthScale, height: (cellWidthScale * (dataSource[indexPath.row].aspectRatio ?? 150)))
+        return CGSize(width: cellWidthScale, height: (cellWidthScale * (dataSource.chosenGallery?.galleryImages?[indexPath.row].aspectRatio ?? 150)))
     }
    
     public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionCell", for: indexPath)
         if let imageCell = cell as? ImageCollectionCell {
-            if let imageUrl = dataSource[indexPath.item].url {
+            if let imageUrl = dataSource.chosenGallery?.galleryImages?[indexPath.item].url {
                 imageCell.imageURL = imageUrl
                 imageCell.fetchImage(with: imageUrl)
                 
@@ -83,7 +85,7 @@ extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayo
     }
     
     public override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        return dataSource.chosenGallery?.galleryImages?.count ?? 0
     }
     
     
@@ -134,10 +136,11 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate, UI
             // If drag item is local collection cell image
             if let sourceIndexPath = item.sourceIndexPath {
                 collectionView.performBatchUpdates {
-                    let sortedImage = dataSource.remove(at: sourceIndexPath.item)
-                    dataSource.insert(sortedImage, at: destinationIndexPath.item)
-                    collectionView.deleteItems(at: [sourceIndexPath])
-                    collectionView.insertItems(at: [destinationIndexPath])
+                    if let sortedImage = dataSource.chosenGallery?.galleryImages?.remove(at: sourceIndexPath.item) {
+                        dataSource.chosenGallery?.galleryImages?.insert(sortedImage, at: destinationIndexPath.item)
+                        collectionView.deleteItems(at: [sourceIndexPath])
+                        collectionView.insertItems(at: [destinationIndexPath])
+                    }
                 }
                 coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
                 
@@ -164,7 +167,7 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate, UI
                         if let imageUrl = urlProvider as? URL {
                             placeholderContext.commitInsertion { insertionIndexPath in
                                 newGalleryItem.url = imageUrl
-                                self.dataSource.insert(newGalleryItem, at: insertionIndexPath.item)
+                                self.dataSource.chosenGallery?.galleryImages?.insert(newGalleryItem, at: insertionIndexPath.item)
                             }
                         } else {
                             placeholderContext.deletePlaceholder()
@@ -183,8 +186,18 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate, UI
 
 
 
-extension ImageGalleryCollectionViewController: ImageGalleriesTableViewControllerDelegate
+extension ImageGalleryCollectionViewController: ImageGalleriesViewControllerDelegate
 {
+    func didChangeGalleryState(isSelected: Bool) {
+        if isSelected == true {
+            collectionView.isHidden = false
+        } else {
+            collectionView.isHidden = true
+        }
+    }
+    
+   
+    
     func reloadData() {
         collectionView.reloadData()
     }

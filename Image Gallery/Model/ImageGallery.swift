@@ -11,15 +11,15 @@ import UIKit
 struct ImageGallery
 {
     let title: String
-    let galleryImages: [GalleryImage]?
+    var galleryImages: [GalleryImage]?
     
 }
 
 
-struct RemovedGallery
-{
-    let title: String
-    let images: [GalleryImage]?
-    let imageURLs: [URL]?
-    
-}
+//struct RemovedGallery
+//{
+//    let title: String
+//    let images: [GalleryImage]?
+//    let imageURLs: [URL]?
+//    
+//}

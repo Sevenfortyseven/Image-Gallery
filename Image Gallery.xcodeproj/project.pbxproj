@@ -80,7 +80,7 @@
 			children = (
 				9F15A1892859248300E1589F /* Extensions */,
 				9F5188502856584A002BAEDD /* Utility */,
-				9F51884528551C46002BAEDD /* Models */,
+				9F51884528551C46002BAEDD /* Model */,
 				9F30782A2854CB7F00050C85 /* Scenes */,
 				9F3078292854CB7500050C85 /* UI */,
 				9F3078282854CB6800050C85 /* Core */,
@@ -125,14 +125,14 @@
 			path = Scenes;
 			sourceTree = "<group>";
 		};
-		9F51884528551C46002BAEDD /* Models */ = {
+		9F51884528551C46002BAEDD /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				9F51884628551CB6002BAEDD /* ImageGallery.swift */,
 				9F15A1862859190F00E1589F /* GalleryImage.swift */,
 				9F5188482855F2C0002BAEDD /* DataStore.swift */,
 			);
-			path = Models;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		9F51884A2855FF17002BAEDD /* Galleries */ = {
