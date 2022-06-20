@@ -9,9 +9,24 @@ import UIKit
 
 extension UIImageView
 {
-    
-//    public var isFetching: Bool = false
-    
-    
+        
+    public func fetchImage(with url: URL?, start: ((Bool) -> Void)? ,completion: @escaping ((Bool) -> Void)) {
+        start?(true)
+        self.image = nil
+        guard let url = url else {
+            print("invalid url")
+            return
+        }
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: url) { data, _, _ in
+            DispatchQueue.main.async {
+                if let data = data, let fetchedImage = UIImage(data: data) {
+                    self.image = fetchedImage
+                    completion(true)
+                }
+            }
+        }
+        dataTask.resume()
+    }
     
 }

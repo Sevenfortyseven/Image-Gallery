@@ -48,6 +48,7 @@ public class ImageGalleriesViewController: UIViewController
     
 }
 
+
 extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSource
 {
     
@@ -77,7 +78,7 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "RemovedGalleryCell", for: indexPath)
             var config = cell.defaultContentConfiguration()
-            config.text = dataSource.removedGalleryStore[indexPath.item].title
+            config.text = dataSource.removedGalleryStore[indexPath.row].title
             cell.contentConfiguration = config
             return cell
         }
@@ -93,6 +94,7 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0 else { return }
         dataSource.chooseGallery(with: indexPath)
         delegate?.reloadData()
         delegate?.didChangeGalleryState(isSelected: true)
@@ -101,21 +103,54 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
     
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // indexPath for second section
-        let indexPathForSectionTwo: IndexPath = [1, indexPath.row]
-        
+        var rowCounter = 0
+        let indexPathForSectionTwo: IndexPath = [1, rowCounter]
         switch editingStyle {
         case .delete:
-            tableView.performBatchUpdates {
-                let removedGallery = dataSource.galleryStore.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .left)
-                print("indexPath row \(indexPath.row)")
-                dataSource.removedGalleryStore.append(removedGallery)
-                tableView.insertRows(at: [indexPathForSectionTwo], with: .right)
+            dataSource.chosenGallery = nil
+            // Move to recently removed
+            if indexPath.section == 0 {
+                tableView.performBatchUpdates {
+                    let removedGallery = dataSource.galleryStore.remove(at: indexPath.row)
+                    dataSource.removedGalleryStore.insert(removedGallery, at: 0)
+                    tableView.deleteRows(at: [indexPath], with: .left)
+                    tableView.insertRows(at: [indexPathForSectionTwo], with: .left)
+                    rowCounter += 1
+                    delegate?.didChangeGalleryState(isSelected: false)
+                }
+            } else if indexPath.section == 1 {
+                // Delete permanently
+                tableView.performBatchUpdates {
+                    dataSource.removedGalleryStore.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPathForSectionTwo], with: .left)
+                    
+                    rowCounter -= 1
+                    
+                }
             }
-            
-            
-            
+        
         default: break
         }
+    }
+    
+    public func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard indexPath.section == 1 else { return nil }
+        let indexPathForSectionTwo: IndexPath = [1, indexPath.row]
+        let lastRow = self.dataSource.galleryStore.endIndex
+        let lastIndexPathForSectionOne: IndexPath = [0, lastRow]
+        let undeleteSwipeAction = UIContextualAction(style: .normal, title: "Undelete") { [weak self] (action, view, completion) in
+            guard let self = self else { return }
+            
+            tableView.performBatchUpdates {
+                let galleryToRecover = self.dataSource.removedGalleryStore.remove(at: indexPath.row)
+                self.dataSource.galleryStore.append(galleryToRecover)
+                tableView.deleteRows(at: [indexPathForSectionTwo], with: .left)
+                tableView.insertRows(at: [lastIndexPathForSectionOne], with: .left)
+                
+            }
+        
+            completion(true)
+        }
+        return UISwipeActionsConfiguration(actions: [undeleteSwipeAction])
     }
 }

@@ -55,6 +55,18 @@ public class ImageGalleryCollectionViewController: UICollectionViewController
   
     }
     
+    
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UICollectionViewCell {
+            if let chosenRow = collectionView.indexPath(for: cell)?.row {
+                if segue.identifier == "showDetails" {
+                    let targetVC = segue.destination as! ImageDetailsViewController
+                    targetVC.imageData = dataSource.chosenGallery?.galleryImages?[chosenRow]
+                }
+            }
+        }
+    }
+    
 }
 
 
@@ -75,8 +87,13 @@ extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayo
         if let imageCell = cell as? ImageCollectionCell {
             if let imageUrl = dataSource.chosenGallery?.galleryImages?[indexPath.item].url {
                 imageCell.imageURL = imageUrl
-                imageCell.fetchImage(with: imageUrl)
-                
+                imageCell.galleryImageView.fetchImage(with: imageUrl) { fetchingStarted in
+                    if fetchingStarted {
+                        imageCell.loadingSpinner.startAnimating()
+                    }
+                } completion: { fetchingFinished in
+                    imageCell.loadingSpinner.stopAnimating()
+                }
             }
         }
         
@@ -88,6 +105,7 @@ extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayo
         return dataSource.chosenGallery?.galleryImages?.count ?? 0
     }
     
+
     
 }
 

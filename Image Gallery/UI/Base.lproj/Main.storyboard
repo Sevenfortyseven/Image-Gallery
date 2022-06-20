@@ -13,7 +13,7 @@
         <!--Split View Controller-->
         <scene sceneID="zP6-3F-nNY">
             <objects>
-                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="secondaryOnly" behavior="overlay" id="0Kd-ev-OkH" sceneMemberID="viewController">
+                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="secondaryOnly" id="0Kd-ev-OkH" sceneMemberID="viewController">
                     <connections>
                         <segue destination="4ub-tg-sk7" kind="relationship" relationship="detailViewController" id="b37-QA-gH8"/>
                         <segue destination="hId-hi-qIb" kind="relationship" relationship="masterViewController" id="1iW-1w-2Go"/>
@@ -114,8 +114,9 @@
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kG7-kB-eak">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         </imageView>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UJf-3J-5r5">
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UJf-3J-5r5">
                                             <rect key="frame" x="54" y="54" width="20" height="20"/>
+                                            <color key="color" systemColor="systemBlueColor"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <constraints>
@@ -130,6 +131,7 @@
                                 <connections>
                                     <outlet property="galleryImageView" destination="kG7-kB-eak" id="e02-8K-XBs"/>
                                     <outlet property="loadingSpinner" destination="UJf-3J-5r5" id="X2l-1W-RXC"/>
+                                    <segue destination="ceJ-yn-cb7" kind="show" identifier="showDetails" id="xxl-dQ-Vyz"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="DropPlaceholderCell" id="HCW-HZ-Uoj">
@@ -138,15 +140,6 @@
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="uEl-uJ-cTW">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="bnI-v4-jRE">
-                                            <rect key="frame" x="54" y="54" width="20" height="20"/>
-                                        </activityIndicatorView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="bnI-v4-jRE" firstAttribute="centerY" secondItem="uEl-uJ-cTW" secondAttribute="centerY" id="5i6-5Q-KUS"/>
-                                        <constraint firstItem="bnI-v4-jRE" firstAttribute="centerX" secondItem="uEl-uJ-cTW" secondAttribute="centerX" id="lbj-gc-NEA"/>
-                                    </constraints>
                                 </collectionViewCellContentView>
                             </collectionViewCell>
                         </cells>
@@ -159,7 +152,64 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8xd-pO-x0Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="875.9765625" y="-480.08784773060023"/>
+            <point key="canvasLocation" x="876" y="-480"/>
+        </scene>
+        <!--Image Details View Controller-->
+        <scene sceneID="4Gg-H1-g3b">
+            <objects>
+                <viewController storyboardIdentifier="ImageDetailsViewController" id="ceJ-yn-cb7" customClass="ImageDetailsViewController" customModule="Image_Gallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zdU-jN-ADZ">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fmD-m9-u8o">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="984" placeholderIntrinsicHeight="1296" translatesAutoresizingMaskIntoConstraints="NO" id="Tc5-aR-vUG">
+                                        <rect key="frame" x="0.0" y="0.0" width="984" height="1296"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Tc5-aR-vUG" secondAttribute="bottom" id="38r-Oi-fgm"/>
+                                    <constraint firstItem="Tc5-aR-vUG" firstAttribute="top" secondItem="fmD-m9-u8o" secondAttribute="top" id="3EF-Pv-1s4"/>
+                                    <constraint firstAttribute="width" priority="250" constant="1024" id="FML-Br-v6i"/>
+                                    <constraint firstItem="Tc5-aR-vUG" firstAttribute="leading" secondItem="fmD-m9-u8o" secondAttribute="leading" id="MN7-nC-Jpi"/>
+                                    <constraint firstAttribute="height" priority="250" constant="1366" id="eQ4-nm-qDX"/>
+                                    <constraint firstAttribute="trailing" secondItem="Tc5-aR-vUG" secondAttribute="trailing" id="xtG-0o-lAK"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="VrY-ag-kgc"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="Xv9-L3-cZ0"/>
+                            </scrollView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="cxz-6w-PmC">
+                                <rect key="frame" x="493.5" y="664.5" width="37" height="37"/>
+                                <color key="color" systemColor="systemBlueColor"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="HuW-Gf-r0a"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fmD-m9-u8o" secondAttribute="trailing" id="60L-0W-7cN"/>
+                            <constraint firstItem="fmD-m9-u8o" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zdU-jN-ADZ" secondAttribute="leading" id="Pd7-5j-ACW"/>
+                            <constraint firstItem="cxz-6w-PmC" firstAttribute="centerX" secondItem="zdU-jN-ADZ" secondAttribute="centerX" id="Puz-sv-0Uy"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fmD-m9-u8o" secondAttribute="bottom" id="St8-9X-5U6"/>
+                            <constraint firstItem="fmD-m9-u8o" firstAttribute="centerX" secondItem="zdU-jN-ADZ" secondAttribute="centerX" id="j3T-x0-5Ec"/>
+                            <constraint firstItem="fmD-m9-u8o" firstAttribute="centerY" secondItem="zdU-jN-ADZ" secondAttribute="centerY" id="jSU-uG-WYC"/>
+                            <constraint firstItem="cxz-6w-PmC" firstAttribute="centerY" secondItem="zdU-jN-ADZ" secondAttribute="centerY" id="mAe-DU-gyZ"/>
+                            <constraint firstItem="fmD-m9-u8o" firstAttribute="top" relation="greaterThanOrEqual" secondItem="zdU-jN-ADZ" secondAttribute="top" id="ybi-2B-hyd"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="cLb-VK-5Ya"/>
+                    <connections>
+                        <outlet property="imageView" destination="Tc5-aR-vUG" id="BQ5-9G-XrQ"/>
+                        <outlet property="loadingSpinner" destination="cxz-6w-PmC" id="jXj-9x-UHL"/>
+                        <outlet property="scrollView" destination="fmD-m9-u8o" id="XOH-NO-7fN"/>
+                        <outlet property="scrollViewHeight" destination="eQ4-nm-qDX" id="OyM-Ix-jXj"/>
+                        <outlet property="scrollViewWidth" destination="FML-Br-v6i" id="lBl-Ux-csz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Czm-Mt-Axh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="875.9765625" y="216.98389458272325"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hLD-fk-XER">
@@ -184,6 +234,9 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBrownColor">
             <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -15,11 +15,3 @@ struct ImageGallery
     
 }
 
-
-//struct RemovedGallery
-//{
-//    let title: String
-//    let images: [GalleryImage]?
-//    let imageURLs: [URL]?
-//    
-//}
