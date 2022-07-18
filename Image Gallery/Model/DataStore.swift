@@ -22,13 +22,13 @@ class DataStore
     
     public func chooseGallery(with indexPath: IndexPath) {
         // Replace chosen galleryStore gallery with current gallery before choosing new gallery
-        let currentGalleryIndex = galleryStore.firstIndex(where: {$0.title == chosenGallery?.title})
-        if chosenGallery != nil, currentGalleryIndex != nil {
-            galleryStore[currentGalleryIndex!] = chosenGallery!
+        let chosenGalleryIndex = galleryStore.firstIndex(where: {$0.uuid == chosenGallery?.uuid})
+        if chosenGallery != nil, chosenGalleryIndex != nil {
+            galleryStore[chosenGalleryIndex!] = chosenGallery!
         }
         
-        let newGalleryImages = galleryStore[indexPath.row]
-        chosenGallery = newGalleryImages
+        let newGallery = galleryStore[indexPath.row]
+        chosenGallery = newGallery
         
     }
     
@@ -39,6 +39,10 @@ class DataStore
     public func createGallery(with title: String) {
         galleryStore.append(ImageGallery(title: title, galleryImages: []))
         
+    }
+    
+    public func removeImage(for indexPath: IndexPath) {
+        chosenGallery?.galleryImages?.remove(at: indexPath.row)
     }
     
 }

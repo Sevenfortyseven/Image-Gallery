@@ -47,8 +47,7 @@ public class ImageDetailsViewController: UIViewController
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.minimumZoomScale = 1/25
-        scrollView.maximumZoomScale = 1
+
     }
     
 }

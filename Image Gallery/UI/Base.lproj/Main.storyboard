@@ -35,16 +35,33 @@
                                 <rect key="frame" x="0.0" y="120" width="420" height="1246"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GalleryCell" id="kQT-Gl-XPg">
-                                        <rect key="frame" x="0.0" y="44.5" width="420" height="51.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GalleryCell" id="kQT-Gl-XPg" customClass="ImageGalleriesTableViewCell" customModule="Image_Gallery" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="420" height="38.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kQT-Gl-XPg" id="LyE-J0-Qyn">
-                                            <rect key="frame" x="100" y="0.0" width="320" height="51.5"/>
+                                            <rect key="frame" x="100" y="0.0" width="320" height="38.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="prr-LA-sWr">
+                                                    <rect key="frame" x="20" y="6" width="252" height="26.5"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="date-time"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="prr-LA-sWr" firstAttribute="height" secondItem="LyE-J0-Qyn" secondAttribute="height" multiplier="0.7" id="IsJ-wR-KJR"/>
+                                                <constraint firstItem="prr-LA-sWr" firstAttribute="centerY" secondItem="LyE-J0-Qyn" secondAttribute="centerY" id="QcB-9Q-54a"/>
+                                                <constraint firstItem="prr-LA-sWr" firstAttribute="width" secondItem="LyE-J0-Qyn" secondAttribute="width" multiplier="0.6" id="ZRU-xa-P55"/>
+                                                <constraint firstItem="prr-LA-sWr" firstAttribute="leading" secondItem="LyE-J0-Qyn" secondAttribute="leading" constant="20" symbolic="YES" id="eWS-Sa-yof"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="galleryTitle" destination="prr-LA-sWr" id="6yJ-Ru-ZVc"/>
+                                            <outlet property="titleTextField" destination="prr-LA-sWr" id="eOd-8t-ghC"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RemovedGalleryCell" id="GDq-GB-qrb">
-                                        <rect key="frame" x="0.0" y="96" width="420" height="51.5"/>
+                                        <rect key="frame" x="0.0" y="83" width="420" height="51.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GDq-GB-qrb" id="ALL-oG-A22">
                                             <rect key="frame" x="100" y="0.0" width="320" height="51.5"/>
@@ -103,6 +120,18 @@
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
+                        <view key="backgroundView" contentMode="scaleToFill" id="kZw-5U-kAK">
+                            <rect key="frame" x="0.0" y="-70" width="1024" height="1366"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJk-vN-q3a">
+                                    <rect key="frame" x="536" y="189" width="240" height="128"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCollectionCell" id="pe6-VX-ybP" customClass="ImageCollectionCell" customModule="Image_Gallery" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -148,7 +177,7 @@
                             <outlet property="delegate" destination="QFr-ui-9N7" id="OqY-N9-tcD"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="TrH-bS-0gB"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="TrH-bS-0gB"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8xd-pO-x0Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -16,5 +16,5 @@ class ImageCollectionCell: UICollectionViewCell
     
     public var imageURL: URL!
     
-   
+
 }

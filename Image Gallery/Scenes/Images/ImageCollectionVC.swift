@@ -11,9 +11,13 @@ import UIKit
 public class ImageGalleryCollectionViewController: UICollectionViewController
 {
     
+ 
+    
     private var dataSource = DataStore.sharedDataStore
     
     private var cellWidthScale: CGFloat = 150
+    private var lastDraggedCellIndexPath: IndexPath?
+    
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +25,8 @@ public class ImageGalleryCollectionViewController: UICollectionViewController
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         addGestureRecognizers()
+        // Add a dropZone
+        self.navigationController?.navigationBar.addInteraction(UIDropInteraction(delegate: self))
     }
     
     
@@ -70,6 +76,7 @@ public class ImageGalleryCollectionViewController: UICollectionViewController
 }
 
 
+// MARK: -- CollectionView Methods
 extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayout
 {
     
@@ -104,9 +111,7 @@ extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayo
     public override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.chosenGallery?.galleryImages?.count ?? 0
     }
-    
 
-    
 }
 
 //MARK: - Drag and Drop Delegate Methods
@@ -133,7 +138,6 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate, UI
     /// Detect  if  CV can  handle a drop of the appropriate type objects
     public func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         if session.localDragSession != nil {
-            print("CanLoadONly Image")
             return session.canLoadObjects(ofClass: UIImage.self)
         }
         return (session.canLoadObjects(ofClass: URL.self) && session.canLoadObjects(ofClass: UIImage.self))
@@ -143,6 +147,15 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate, UI
     public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         // if drag initiator is self collectionView then move, if not then copy
         let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
+        
+        // Get source indexpath on a drag item
+        let location = session.location(in: collectionView)
+        collectionView.performUsingPresentationValues {
+            if let sourceIndexPath = collectionView.indexPathForItem(at: location) {
+                lastDraggedCellIndexPath = sourceIndexPath
+            }
+        }
+        
         return UICollectionViewDropProposal(operation: isSelf ? .move : .copy, intent: .insertAtDestinationIndexPath)
     }
     
@@ -218,6 +231,30 @@ extension ImageGalleryCollectionViewController: ImageGalleriesViewControllerDele
     
     func reloadData() {
         collectionView.reloadData()
+    }
+    
+}
+
+extension ImageGalleryCollectionViewController: UIDropInteractionDelegate
+{
+//    public func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+//        return session.canLoadObjects(ofClass: UIImage.self)
+//    }
+//
+    public func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    public func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        
+        session.loadObjects(ofClass: UIImage.self) { image in
+            if let sourceIndexPath = self.lastDraggedCellIndexPath {
+                self.collectionView.performBatchUpdates {
+                    self.dataSource.removeImage(for: sourceIndexPath)
+                    self.collectionView.deleteItems(at: [sourceIndexPath])
+                }
+            }
+        }
     }
     
 }

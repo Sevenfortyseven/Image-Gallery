@@ -10,8 +10,15 @@ import UIKit
 
 struct ImageGallery
 {
-    let title: String
+    var title: String
     var galleryImages: [GalleryImage]?
+    var uuid: String
+    
+    init(title: String, galleryImages: [GalleryImage]?) {
+        self.title = title
+        self.galleryImages = galleryImages
+        self.uuid = UUID().uuidString
+    }
     
 }
 

@@ -28,8 +28,7 @@ public class ImageGalleriesViewController: UIViewController
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        hideKeyboardOnTouches()
     }
     
     @IBAction func addNewGallery(_ sender: Any) {
@@ -70,10 +69,9 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath)
-            var config = cell.defaultContentConfiguration()
-            config.text = dataSource.galleryStore[indexPath.row].title
-            cell.contentConfiguration = config
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GalleryCell", for: indexPath) as! ImageGalleriesTableViewCell
+            cell.galleryTitle.text = dataSource.galleryStore[indexPath.row].title
+            cell.delegate = self
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "RemovedGalleryCell", for: indexPath)
@@ -153,4 +151,13 @@ extension ImageGalleriesViewController: UITableViewDelegate, UITableViewDataSour
         }
         return UISwipeActionsConfiguration(actions: [undeleteSwipeAction])
     }
+}
+
+extension ImageGalleriesViewController: ImageGallertiesTableViewCellDelegate
+{
+    func didUpdateGalleryTitle(_ text: String, _ currentCell: UITableViewCell) {
+        guard let currentIndexPath = galleriesTableView.indexPath(for: currentCell) else { return }
+        dataSource.galleryStore[currentIndexPath.row].title = text
+    }
+    
 }
